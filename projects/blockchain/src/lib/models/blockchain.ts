@@ -44,7 +44,7 @@ export class Blockchain {
         return hash;
     }
 
-    groofOfWorkNonce(previousHash: string, currentBlockData: BlockData): string{
+    proofOfWorkNonce(previousHash: string, currentBlockData: BlockData): string{
         let nonce= 0;
         let hash= this.hashBlock( previousHash, currentBlockData, nonce);
 
@@ -54,5 +54,43 @@ export class Blockchain {
         }
 
         return nonce.toString();
+    }
+
+    validateBlock(block: Block, previousBlock: Block): boolean {
+        if(block.previousHash !== previousBlock.hash){
+            return false;
+        }
+
+        const validatedBlockHash= this.hashBlock(block.previousHash, new BlockData(block), block.nonce);
+
+        if(validatedBlockHash !== block.hash){
+            return false;
+        }
+
+        return block.hash.substr(0, this.dificulty) === this.chain[0].hash.substr(0, this.dificulty);
+    }
+
+    isValidChain(blockchain: Blockchain): boolean {
+        const testChain = blockchain.chain;
+
+        const invalidBlocks = testChain.filter((block, index) => {
+            const isSameHash = block.hash === this.chain[index].hash;
+            const isSamePreviousHash = block.previousHash === this.chain[index].previousHash;
+        
+            return !isSameHash || !isSamePreviousHash || (index > 0 && !this.validateBlock(block, testChain[index - 1])); 
+        });
+
+        return invalidBlocks.length === 0;
+    }
+
+    addTransactionToPending(transaction: Transaction): number {
+        this.pendingTransactions.push(transaction);
+        return this.getLatestBlock().index +1;
+    }
+
+    newTransaction(amount: number, sender: string, recipient: string): Transaction {
+        const transaction= new Transaction(amount, sender, recipient);
+
+        return transaction;
     }
 }

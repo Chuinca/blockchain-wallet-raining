@@ -7,7 +7,6 @@ import { BlockComponent } from './block/block.component';
 
 const routes: Routes = [
   {path: 'send-transaction', component: SendTransactionComponent},
-  {path: 'app-balance', component: BalanceComponent},
   {path: 'dashboard', component: DashboardComponent},
   {path: 'block', component: BlockComponent}
   

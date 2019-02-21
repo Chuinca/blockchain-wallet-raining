@@ -1,7 +1,7 @@
 <div>
-    <input #owner type="text">
-  <button (click)= "getBalance(owner.value)"> Get Balance</button>
-  <span class="balance">
+    <input #owner type="text" id="inName">
+  <button (click)= "getBalance(owner.value)" class="btn btn-outline-danger btn-sm" style="margin: 0px 0px 5px 5px;"> Get Balance</button>
+  <span class="balance" >
     Saldo de {{owner.value}}: R${{value}}
   </span>
 </div>

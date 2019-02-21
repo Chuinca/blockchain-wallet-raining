@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Block, Transaction } from 'projects/blockchain/src/public_api';
+import { getComponentViewByIndex } from '@angular/core/src/render3/util';
 
 @Component({
   selector: 'app-balance',
@@ -23,18 +24,14 @@ export class BalanceComponent implements OnInit {
   getBalance(owner: string){
     this.owner= owner;
     const initial= new Transaction(0, 'system', owner);
-    const transactionReducer= (transaction: Transaction, total: Transaction) =>{ 
-      if(transaction.recipient === owner){
-        total.amount= Number(transaction.amount) + Number(total.amount);
+    let total = 0;
+    this.chain.filter((block: Block) =>{
+      for (const transaction of block.transactions){
+        if ( transaction.recipient === initial.recipient) {
+          total += Number(transaction.amount);
+        }
       }
-      return total;
-    };
-
-    const chain= this.chain;
-    const transactions= chain.map((block: Block) => {
-      return block.transactions.reduce(transactionReducer, initial);
     });
-    const balance= transactions.reduce(transactionReducer, initial);
-    this.value= balance.amount;
+    this.value = total;
   }
 }

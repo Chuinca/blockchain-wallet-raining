@@ -7,3 +7,10 @@ $invalid-color: red;
 .invalid{
     color: $invalid-color
 }
+
+.divider{
+    width:5px;
+    
+    height:auto;
+    display:inline-block;
+}

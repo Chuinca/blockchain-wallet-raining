@@ -9,6 +9,9 @@ import { SendTransactionComponent } from './send-transaction/send-transaction.co
 import { BalanceComponent } from './balance/balance.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BlockComponent } from './block/block.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { AlertModule } from 'ngx-bootstrap/alert';
+
 
 const GenesisProvider = () => {
   return new Block(1, 12345, [], 'genesis', '0ae1234', '00');
@@ -24,7 +27,9 @@ const GenesisProvider = () => {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    ModalModule.forRoot(),
+    AlertModule.forRoot()
   ],
   providers: [{
     provide: 'GENESIS_BLOCK',

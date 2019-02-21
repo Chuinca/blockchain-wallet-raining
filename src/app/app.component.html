@@ -4,19 +4,49 @@
     'invalid': !isValid
   }">BlockChain 
 </h2>
-<button tooltip="Mine new block" (click)="onMine()">Mine</button>
+<button tooltip="Mine new block"  style="margin: 5px;"  class="btn btn-success btn-lg" (click)="onMine()">Mine</button>  
+<div *ngFor="let alert of alerts">
+    <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout" (onClosed)="onClosed(alert)">{{ alert.msg }}</alert>
+  </div>
+
+<div >
+  <button class="btn btn-outline-primary" style="margin: 5px;" [routerLink]="['send-transaction']" >Send Transaction</button>  
+  <button class="btn btn-outline-primary" style="margin: 5px;" [routerLink]= "['dashboard']"> Dashboard</button>
+</div>
+
 <div>
   {{blockchain.pendingTransactions.length}} Pending Transactions
 </div>
-  <nav>
-    <button [routerLink]="['send-transaction']">Send Transaction</button>
-    <button [routerLink]= "['dashboard']"> Dashboard</button>
-  </nav>
+
 </header>
 <main>
     <router-outlet></router-outlet>
 </main>
+<ul *ngFor="let chain of blockchain.chain" class="list-group">
+  <button class="list-group-item d-flex justify-content-between align-items-center " (click)="openModal(template, chain.transactions)" style="margin: 2px; text-align: left">Index: {{chain.index}} <br>
+ Hash: {{chain.hash}}
+    <span class="badge badge-primary badge-pill" style="font-size: 20px; background-color: blue" >Transactions: {{chain.transactions.length}}</span>
+  </button>
+</ul>
 
-<pre>
-{{ blockchain | json}}
-</pre>
+<!-----------------------------------\/ MODAL \/------------------------------------>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul *ngFor="let lt of liveTransactions" class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center "> 
+        Recipient: {{lt.recipient}} <br>
+        Amount: W${{lt.amount}}
+      </li>
+    </ul>
+    <p style=" font-size: 11px">* W$= WiproCoins</p>
+  </div>
+</ng-template>
+
+<!-----------------------------------/\ MODAL /\------------------------------------>
